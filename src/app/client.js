@@ -27,6 +27,7 @@ const wsLink = new WebSocketLink({
     connectionParams: {
       authToken: localStorage.getItem("hodler-visits-token"),
     },
+    timeout: 30000
   },
 });
 
