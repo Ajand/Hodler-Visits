@@ -4,21 +4,24 @@ import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 
 import {
-  CreateRoom,
-  JoinRoom,
-  ExitRoom,
+  StartMeeting,
+  JoinMeeting,
+  ExitMeeting,
   JoinStage,
   LeaveStage,
   RaiseHand,
-  TurnOffAudio,
-  TurnOnAudio,
-  TurnOffVideo,
-  TurnOnVideo,
+  ToggleMedia,
 } from "../lib/MeetingHandler";
 
 const TestLib = () => {
   return <div>
-      <Button onClick={() => CreateRoom()}>Create Room</Button>
+      <Button onClick={() => StartMeeting('123')}>Create Meeting</Button>
+      <Button onClick={() => JoinMeeting('123')}>Join Meeting</Button>
+      <Button onClick={() => ExitMeeting('123')}>Exit Meeting</Button>
+      <Button onClick={() => JoinStage('123')}>Join Stage</Button>
+      <Button onClick={() => LeaveStage('123')}>Leave Stage</Button>
+      <Button onClick={() => RaiseHand('123')}>Raise Hand</Button>
+      <Button onClick={() => ToggleMedia('123')}>ToggleMedia</Button>
   </div>;
 };
 

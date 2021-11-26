@@ -4,7 +4,7 @@ import peer from "./protooClient";
  * Room Data Structure
  * 
     {
-        name: "roomName",
+        name: "meetingName",
         createdAt: Date,
         creator: Peer,
         Audiences: [Username],
@@ -13,60 +13,94 @@ import peer from "./protooClient";
 
  */
 
-export const CreateRoom = () => {
-  // Will Create A room,
+export const StartMeeting = (meetingId) => {
+  // Will Create A meeting,
   // Only Moderators could do it
-  //  Will notify Others that the room is created
-
-  console.log(peer.connected, peer.closed, peer.data);
+  //  Will notify Others that the meeting is created
   peer
-    .request("createRoom", { roomName: "here we are" })
+    .request("startMeeting", { meetingId })
     .then((d) => {
-      console.log(d, 'create room response');
+      console.log(d, "create meeting response");
     })
     .catch((err) => {
       console.log(err);
     });
 };
 
-export const JoinRoom = () => {
-  // Will join to a room that is created
-  // If the room does not exist will throw an error
+export const JoinMeeting = (meetingId) => {
+  // Will join to a meeting that is created
+  // If the meeting does not exist will throw an error
+  peer
+    .request("joinMeeting", { meetingId })
+    .then((d) => {
+      console.log(d, "join meeting response");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
-export const ExitRoom = () => {
-  // Will exit the room
-  // If it's not in the room it will do nothing
+export const ExitMeeting = (meetingId, target) => {
+  // Will exit the meeting
+  // If it's not in the meeting it will do nothing
+  peer
+    .request("exitMeeting", { meetingId })
+    .then((d) => {
+      console.log(d, "exit meeting response");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
-export const JoinStage = () => {
+export const JoinStage = (meetingId, target) => {
   // Will join the stage
   // It could be configurable -> Only moderator could do it | Speakers can also do it
+  peer
+    .request("joinStage", { meetingId, target })
+    .then((d) => {
+      console.log(d, "joinStage meeting response");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
-export const LeaveStage = () => {
+export const LeaveStage = (meetingId, target) => {
   // Will leave the stage
   // Moderators could use it for anyone
   // Others could use it for themselves
+  peer
+    .request("leaveStage", { meetingId, target })
+    .then((d) => {
+      console.log(d, "leaveStage meeting response");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
-export const RaiseHand = () => {
+export const RaiseHand = (meetingId) => {
   // Will notify moderators that someone wants to come to stage
   // Only if there is no raise hand yet
+  peer
+    .request("raiseHand", { meetingId })
+    .then((d) => {
+      console.log(d, "raiseHand meeting response");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
-export const TurnOffAudio = () => {
+export const ToggleMedia = (meetingId, variant) => {
   // Will turn off the audio of stager
-};
-
-export const TurnOnAudio = () => {
-  // Will turn on the audio of stager
-};
-
-export const TurnOffVideo = () => {
-  // Will turn off the video of the stager
-};
-
-export const TurnOnVideo = () => {
-  // Will turn on the video of the stager
+  peer
+    .request("toggleMedia", { meetingId, variant })
+    .then((d) => {
+      console.log(d, "toggleMedia meeting response");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
