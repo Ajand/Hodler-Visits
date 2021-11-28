@@ -1,5 +1,5 @@
 import protooClient from "protoo-client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 /**
  * Room Data Structure
@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 
  */
 
-export default (username) => {
+const Handler = (username) => {
   const [connected, setConnected] = useState(false);
 
   const transport = new protooClient.WebSocketTransport(
@@ -23,9 +23,8 @@ export default (username) => {
 
   const peer = new protooClient.Peer(transport);
 
-
   peer.on("open", () => {
-    console.log('connection opened')
+    console.log("connection opened");
   });
 
   peer.on("connected", () => {
@@ -156,3 +155,5 @@ export default (username) => {
     ToggleMedia,
   };
 };
+
+export default Handler

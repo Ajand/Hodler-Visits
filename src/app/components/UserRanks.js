@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope -- Unaware of jsxImportSource */
 /** @jsxImportSource @emotion/react */
-import { useState } from "react";
-import { css } from "@emotion/react";
+//import { useState } from "react";
+//import { css } from "@emotion/react";
 import { Chip } from "@mui/material";
 
 const ProfilePage = ({ rank, onClick }) => {

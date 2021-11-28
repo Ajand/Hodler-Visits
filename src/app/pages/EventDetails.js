@@ -7,9 +7,8 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 
-import EventPlayer from "../components/EventPlayer";
 import EventCard from "../components/EventCard";
-import MeetingScreen from '../components/EventPlayer/MeetingScreen'
+import MeetingScreen from "../components/EventPlayer/MeetingScreen";
 
 import { gql, useQuery, useMutation, useSubscription } from "@apollo/client";
 import { useParams } from "react-router-dom";
@@ -79,7 +78,7 @@ const EventDetails = ({ me }) => {
 
   useEffect(() => {
     refetch();
-  }, [eventStatusChanged.data]);
+  }, [eventStatusChanged.data, refetch]);
 
   if (loading)
     return (
@@ -156,60 +155,58 @@ const EventDetails = ({ me }) => {
     }
 
     if (data.event.status === "WAITING") {
-        return (
-          <Paper
-            css={css`
-              padding: 2em;
-              margin: 1em;
-            `}
-          >
-            <Typography variant="body2">
-              Event Has not been started yet.
-            </Typography>
-          </Paper>
-        );
+      return (
+        <Paper
+          css={css`
+            padding: 2em;
+            margin: 1em;
+          `}
+        >
+          <Typography variant="body2">
+            Event Has not been started yet.
+          </Typography>
+        </Paper>
+      );
     }
 
     if (data.event.status === "STARTED") {
-        return (
-          <Paper
-            css={css`
-              padding: 2em;
-              margin: 1em;
-            `}
-          >
-            <Typography variant="body2">
-              Meeting is running. Wanna join the event?
-            </Typography>
-            <Button
+      return (
+        <Paper
+          css={css`
+            padding: 2em;
+            margin: 1em;
+          `}
+        >
+          <Typography variant="body2">
+            Meeting is running. Wanna join the event?
+          </Typography>
+          <Button
             css={css`
               margin-top: 1em;
             `}
             variant="contained"
             color="primary"
             onClick={() => {
-              setInMeeting(true)
+              setInMeeting(true);
             }}
           >
             Join The Meeting
           </Button>
-          </Paper>
-        );
+        </Paper>
+      );
     }
 
     if (data.event.status === "FINISHED") {
-        return (
-          <Paper
-            css={css`
-              padding: 2em;
-              margin: 1em;
-            `}
-          >
-            <Typography variant="body2">
-              Event Has been finished.
-            </Typography>
-          </Paper>
-        );
+      return (
+        <Paper
+          css={css`
+            padding: 2em;
+            margin: 1em;
+          `}
+        >
+          <Typography variant="body2">Event Has been finished.</Typography>
+        </Paper>
+      );
     }
   };
 

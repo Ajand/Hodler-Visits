@@ -1,7 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope -- Unaware of jsxImportSource */
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import Typography from "@mui/material/Typography";
 import { useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 

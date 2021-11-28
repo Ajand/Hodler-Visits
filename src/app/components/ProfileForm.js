@@ -4,14 +4,10 @@ import { css } from "@emotion/react";
 import { useState, useEffect } from "react";
 import {
   Paper,
-  Typography,
   Avatar,
-  useTheme,
-  IconButton,
   Button,
   TextField,
 } from "@mui/material";
-import { Edit } from "@mui/icons-material";
 
 import { useMutation, gql } from "@apollo/client";
 
@@ -40,7 +36,6 @@ const EDIT_PROFILE = gql`
 `;
 
 const ProfileWidget = ({ onCancel, noCancel, me, refetch }) => {
-  const theme = useTheme();
 
   const [completeProfile] = useMutation(COMPLETE_PROFILE);
   const [editProfile] = useMutation(EDIT_PROFILE);
