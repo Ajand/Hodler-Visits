@@ -34,7 +34,7 @@ const OnlineUsers = ({ users }) => {
     <>
       <List sx={{ width: "100%", bgcolor: "background.paper" }}>
         {users.map((user) => (
-          <ListItem>
+          <ListItem key={user._id}>
             <ListItemAvatar>
               <Avatar
                 src={
@@ -254,6 +254,7 @@ const PollCreator = ({ ev }) => {
         />
         {options.map((option, index) => (
           <div
+            key={index}
             css={css`
               display: flex;
               justify-content: space-between;

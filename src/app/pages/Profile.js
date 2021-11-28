@@ -11,6 +11,7 @@ import ProfileForm from "../components/ProfileForm";
 
 
 const ProfilePage = ({refetch, me}) => {
+  const history = useHistory()
 
   useEffect(() => {
     if(!me) {
@@ -19,12 +20,11 @@ const ProfilePage = ({refetch, me}) => {
     if(me && !me.setted) {
       setIsNotSetted(true)
     }
-  }, [me])
+  }, [me, history])
 
   const [isNotSetted, setIsNotSetted] = useState(false)
   const [isEdit, setIsEdit] = useState(false);
 
-  const history = useHistory()
 
   const onEdit = () => {
     setIsEdit(true);

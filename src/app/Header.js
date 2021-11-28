@@ -34,23 +34,23 @@ export default function MenuAppBar({ me, loading }) {
 
   const history = useHistory()
 
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+//  const [auth, setAuth] = React.useState(true);
+//  const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [getNonce] = useMutation(GET_NONCE);
   const [getToken] = useMutation(GET_TOKEN);
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
-
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+//  const handleChange = (event) => {
+//    setAuth(event.target.checked);
+//  };
+//
+//  const handleMenu = (event) => {
+//    setAnchorEl(event.currentTarget);
+//  };
+//
+//  const handleClose = () => {
+//    setAnchorEl(null);
+//  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>

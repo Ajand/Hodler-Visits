@@ -13,6 +13,7 @@ import MediaActions from "./MediaActions";
 import useUserMedia from "./useUserMedia";
 
 import Conference from "./Conference";
+import MeetingGrid from "./MeetingGrid";
 
 const CONNECT_TO_EVENT = gql`
   mutation connectToEvent {
@@ -77,6 +78,7 @@ const MeetingScreen = ({ ev, me }) => {
         userStream={userStream}
         user={me}
       />
+      <MeetingGrid />
     </Grid>
   );
 };

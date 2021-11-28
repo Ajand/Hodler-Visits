@@ -1,14 +1,14 @@
 /* eslint-disable react/react-in-jsx-scope -- Unaware of jsxImportSource */
 /** @jsxImportSource @emotion/react */
 import { useEffect } from "react";
-import { Route, BrowserRouter, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { useQuery, gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { useHistory } from "react-router-dom";
 
 import Header from "./Header";
 
-import Home from "./pages/Home";
+//import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import CreateEvent from "./pages/CreateEvent";
 import EventManager from "./pages/EventManager";
@@ -39,7 +39,7 @@ const ME = gql`
 const Routes = () => {
   useEffect(() => {}, []);
 
-  const { data, loading, error, refetch } = useQuery(ME);
+  const { data, loading, refetch } = useQuery(ME);
 
   const history = useHistory();
 
@@ -79,7 +79,6 @@ const Routes = () => {
           <Route path="/event/:id" exact>
             <EventDetails me={data.me} />
           </Route>
-
         </Switch>
       ) : (
         <Switch>
