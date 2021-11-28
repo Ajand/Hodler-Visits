@@ -7,8 +7,12 @@ import Grid from "@mui/material/Grid";
 import { gql, useMutation } from "@apollo/client";
 
 import Sidebar from "./Sidebar";
+import EventPlayer from ".";
+import MediaActions from "./MediaActions";
 
 import useUserMedia from "./useUserMedia";
+
+import Conference from "./Conference";
 
 const CONNECT_TO_EVENT = gql`
   mutation connectToEvent {
@@ -22,25 +26,14 @@ const DISCONNECT_FROM_EVENT = gql`
 `;
 
 const MeetingScreen = ({ ev, me }) => {
-  const videoRef = useRef(null);
-  const videoRef2 = useRef(null);
-
   const constraints = {
-    video: true,
-    audio: false,
+    video: false,
+    audio: true,
   };
 
-  const onError = (e) => alert(e);
+  const onError = (e) => console.log(e);
 
   const userStream = useUserMedia(constraints, onError);
-
-  useEffect(() => {
-    console.log(userStream);
-    if (userStream) {
-      videoRef.current.srcObject = userStream;
-      videoRef2.current.srcObject = userStream;
-    }
-  }, [userStream]);
 
   const [connectToEvent] = useMutation(CONNECT_TO_EVENT);
   const [disconnectFromEvent] = useMutation(DISCONNECT_FROM_EVENT);
@@ -51,6 +44,8 @@ const MeetingScreen = ({ ev, me }) => {
     return () => disconnectFromEvent();
   }, []);
 
+  const conference = null;
+
   return (
     <Grid
       container
@@ -60,34 +55,28 @@ const MeetingScreen = ({ ev, me }) => {
       `}
     >
       <Grid item md={6} lg={9}>
-        <Grid container spacing={4} css={css`align-items: center`}>
-          <Grid item lg={6}>
-            <video
-              css={css`
-                width: 100%;
-                border-radius: 1em;
-                border: 1px solid #f2a52b;
-              `}
-              autoPlay
-              ref={videoRef}
-            />
-          </Grid>
-          <Grid item lg={6}>
-          <video
-              css={css`
-                width: 100%;
-                border-radius: 1em;
-                border: 1px solid #f2a52b;
-              `}
-              autoPlay
-              ref={videoRef2}
-            />
-          </Grid>
+        <Grid
+          container
+          spacing={4}
+          css={css`
+            align-items: center;
+            padding: 2em;
+          `}
+        >
+          {userStream && <EventPlayer userStream={userStream} />}
         </Grid>
       </Grid>
       <Grid item md={6} lg={3}>
         <Sidebar ev={ev} me={me} />
       </Grid>
+      <MediaActions
+        speaker={false}
+        onStage={true}
+        videoOn={true}
+        voiceOn={true}
+        userStream={userStream}
+        user={me}
+      />
     </Grid>
   );
 };

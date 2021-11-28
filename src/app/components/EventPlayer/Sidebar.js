@@ -236,7 +236,6 @@ const PollCreator = ({ ev }) => {
   const [want2Weight, setWant2Weight] = useState(1);
   const [want3Weight, setWant3Weight] = useState(1);
 
-  console.log(options);
 
   const [createPoll] = useMutation(CREATE_POLL);
 

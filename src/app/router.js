@@ -14,7 +14,6 @@ import CreateEvent from "./pages/CreateEvent";
 import EventManager from "./pages/EventManager";
 import Events from "./pages/Events";
 import EventDetails from "./pages/EventDetails";
-import TestLib from "./pages/TestLib";
 
 import Loading from "./components/Loading";
 
@@ -80,9 +79,7 @@ const Routes = () => {
           <Route path="/event/:id" exact>
             <EventDetails me={data.me} />
           </Route>
-          <Route path="/test-lib" exact>
-            <TestLib me={data.me} />
-          </Route>
+
         </Switch>
       ) : (
         <Switch>

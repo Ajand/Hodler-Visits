@@ -12,7 +12,7 @@ import useUserMedia from "./useUserMedia";
 import Loading from "../Loading";
 
 import MediaActions from "./MediaActions";
-import Sidebar from './Sidebar'
+import Sidebar from "./Sidebar";
 
 const MEETING_STATUS = gql`
   query meetingStatus {
@@ -56,7 +56,7 @@ const PRODUCE = gql`
   }
 `;
 
-const EventPlayer = () => {
+const EventPlayer = ({ userStream }) => {
   const [device, setDevice] = useState(null);
   const [deviceLoaded, setDeviceLoaded] = useState(false);
 
@@ -65,15 +65,6 @@ const EventPlayer = () => {
   const [createSendTransport] = useMutation(CREATE_SEND_TRANSPORT);
   const [connectSendTransport] = useMutation(CONNECT_SEND_TRANSPORT);
   const [produce] = useMutation(PRODUCE);
-
-  const constraints = {
-    video: true,
-    audio: true,
-  };
-
-  const onError = (e) => alert(e);
-
-  const userStream = useUserMedia(constraints, onError);
 
   useEffect(() => {
     setDevice(new mediasoupClient.Device());
@@ -107,15 +98,26 @@ const EventPlayer = () => {
             createSendTransport()
               .then(async ({ data }) => {
                 //  console.log(data.createSendTransport)
-                const sendTransport = device.createSendTransport(
-                  JSON.parse(data.createSendTransport)
+
+                console.log(JSON.parse(data.createSendTransport));
+
+                const transportOptions = JSON.parse(
+                  JSON.parse(data.createSendTransport).transportParams
                 );
 
+                console.log(transportOptions)
+
+                const sendTransport =
+                  device.createSendTransport(transportOptions);
+
                 sendTransport.on("connect", (params, callback, errback) => {
-                  console.log("transport connected: ", JSON.parse(data.createSendTransport).id);
+                  console.log(
+                    "transport connected: ",
+                    transportOptions.id
+                  );
                   connectSendTransport({
                     variables: {
-                      transportId: JSON.parse(data.createSendTransport).id,
+                      transportId: transportOptions.id,
                       params: JSON.stringify(params),
                     },
                   })
@@ -127,25 +129,24 @@ const EventPlayer = () => {
 
                 sendTransport.on("produce", (params, callback, errback) => {
                   console.log("transport produce: ", params, {
-                    transportId: JSON.parse(data.createSendTransport).id,
+                    transportId: transportOptions.id,
                     params: JSON.stringify(params),
                   });
 
                   produce({
                     variables: {
-                      transportId: JSON.parse(data.createSendTransport).id,
+                      transportId: transportOptions.id,
                       params: JSON.stringify(params),
                     },
                   })
-                    .then(({data}) => {
-                      callback({id: data.produce});
+                    .then(({ data }) => {
+                      callback({ id: data.produce });
                     })
                     .catch((err) => errback());
                 });
 
                 const audioTrack = userStream.getAudioTracks()[0];
                 const videoTrack = userStream.getVideoTracks()[0];
-
 
                 sendTransport
                   .produce({
@@ -168,7 +169,6 @@ const EventPlayer = () => {
                   })
                   .then((prod) => console.log(prod))
                   .catch((err) => console.log(err));
-
               })
               .catch((err) => console.log(err));
           }}

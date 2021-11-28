@@ -1,7 +1,7 @@
 import { createTheme, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ApolloProvider } from "@apollo/client";
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from "react-router-dom";
 
 import client from "./app/client";
 
@@ -14,7 +14,9 @@ const theme = createTheme({
     primary: {
       main: "#F2A52B",
     },
-
+    secondary: {
+      main: "#2B78F2"
+    },
     // palette values for dark mode
     background: {
       default: "#121212",
@@ -37,8 +39,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
-        <Routes />
-
+          <Routes />
         </BrowserRouter>
       </ThemeProvider>
     </ApolloProvider>
