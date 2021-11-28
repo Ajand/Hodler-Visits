@@ -27,7 +27,7 @@ const DISCONNECT_FROM_EVENT = gql`
 
 const MeetingScreen = ({ ev, me }) => {
   const constraints = {
-    video: false,
+    video: true,
     audio: true,
   };
 
