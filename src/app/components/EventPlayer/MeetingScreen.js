@@ -27,6 +27,8 @@ const DISCONNECT_FROM_EVENT = gql`
 `;
 
 const MeetingScreen = ({ ev, me }) => {
+
+
   const constraints = {
     video: true,
     audio: true,
@@ -64,7 +66,7 @@ const MeetingScreen = ({ ev, me }) => {
             padding: 2em;
           `}
         >
-          {userStream && <EventPlayer userStream={userStream} />}
+          {userStream && <EventPlayer userStream={userStream} me={me} ev={ev} />}
         </Grid>
       </Grid>
       <Grid item md={6} lg={3}>
@@ -78,7 +80,6 @@ const MeetingScreen = ({ ev, me }) => {
         userStream={userStream}
         user={me}
       />
-      <MeetingGrid />
     </Grid>
   );
 };

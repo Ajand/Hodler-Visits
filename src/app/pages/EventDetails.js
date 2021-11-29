@@ -25,6 +25,7 @@ const EVENT = gql`
       isGated
       status
       _id
+      stagers
       onlineUsers {
         displayName
         _id
@@ -78,6 +79,7 @@ const EventDetails = ({ me }) => {
 
   useEffect(() => {
     refetch();
+    console.log(data?.event?.stagers)
   }, [eventStatusChanged.data, refetch]);
 
   if (loading)

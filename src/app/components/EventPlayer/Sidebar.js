@@ -58,6 +58,7 @@ const OnlineUsers = ({ users }) => {
 const MESSAGES = gql`
   query messages($eventId: ID!) {
     messages(eventId: $eventId) {
+      _id
       sender {
         displayName
         avatar

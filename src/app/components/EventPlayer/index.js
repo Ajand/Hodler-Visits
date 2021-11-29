@@ -38,12 +38,6 @@ const GET_RTP_CAP = gql`
   }
 `;
 
-const CREATE_SEND_TRANSPORT = gql`
-  mutation createSendTransport {
-    createSendTransport
-  }
-`;
-
 const CONNECT_SEND_TRANSPORT = gql`
   mutation connectSendTransport($transportId: String!, $params: String!) {
     connectSendTransport(transportId: $transportId, params: $params)
@@ -56,24 +50,76 @@ const PRODUCE = gql`
   }
 `;
 
-const EventPlayer = ({ userStream }) => {
+const WANNA_CONSUME = gql`
+  mutation wannaConsume($stager: ID!) {
+    wannaConsume(stager: $stager)
+  }
+`;
+
+const JOIN_STAGE = gql`
+  mutation joinStage {
+    joinStage
+  }
+`;
+
+const EventPlayer = ({ userStream, me, ev }) => {
   const [device, setDevice] = useState(null);
   const [deviceLoaded, setDeviceLoaded] = useState(false);
+  const [consumers, setConsumers] = useState(new Map());
 
   const [startSession] = useMutation(START_SESSION);
   const [getRTPCap] = useMutation(GET_RTP_CAP);
-  const [createSendTransport] = useMutation(CREATE_SEND_TRANSPORT);
   const [connectSendTransport] = useMutation(CONNECT_SEND_TRANSPORT);
   const [produce] = useMutation(PRODUCE);
+  const [joinStage] = useMutation(JOIN_STAGE);
+
+  const [wannaConsume] = useMutation(WANNA_CONSUME);
 
   useEffect(() => {
-    setDevice(new mediasoupClient.Device());
+    const dev = new mediasoupClient.Device();
+    setDevice(dev);
+
+    getRTPCap()
+      .then(({ data }) => JSON.parse(data.getRTPCap))
+      .then((routerRtpCapabilities) => {
+        // create a device
+        return dev.load({ routerRtpCapabilities });
+        // load
+        // device can produce
+      })
+      .then((dev) => {
+        setDeviceLoaded(true);
+      })
+      .catch((err) => console.log(err));
   }, []);
   //
   //  console.log(device);
   //
+
   const meetingStatus = useQuery(MEETING_STATUS);
   const changeSubscription = useSubscription(CHANGE_STATUS);
+
+  useEffect(() => {
+    if (device?.loaded && meetingStatus.data?.meetingStatus == "started") {
+      console.log(ev.stagers, "From consuming system");
+      ev.stagers.filter((stager) => stager != me._id).forEach((stager) => {
+        // Check whether the consumer Exist
+        if (![...consumers.keys()].includes(stager)) {
+          console.log("Lets add the stager: ", stager);
+          wannaConsume({ variables: { stager: stager } })
+            .then((res) => console.log(`Wanna Consume result`, res))
+            .catch((err) => console.log(err));
+        } else {
+          console.log("Stager already exists: ", stager);
+        }
+        // If not try to make it exist
+        // -> In the process listen for changes
+        // -> Mute Video, Audio - flip
+      });
+      // First Let's Create An API TO send these to Server
+      /* ;*/
+    }
+  }, [device, deviceLoaded, meetingStatus, ev.stagers]);
 
   useEffect(() => {
     meetingStatus.refetch();
@@ -95,26 +141,17 @@ const EventPlayer = ({ userStream }) => {
       <div>
         <Button
           onClick={() => {
-            createSendTransport()
+            joinStage()
               .then(async ({ data }) => {
-                //  console.log(data.createSendTransport)
-
-                console.log(JSON.parse(data.createSendTransport));
-
                 const transportOptions = JSON.parse(
-                  JSON.parse(data.createSendTransport).transportParams
+                  JSON.parse(data.joinStage).transportParams
                 );
-
-                console.log(transportOptions)
 
                 const sendTransport =
                   device.createSendTransport(transportOptions);
 
                 sendTransport.on("connect", (params, callback, errback) => {
-                  console.log(
-                    "transport connected: ",
-                    transportOptions.id
-                  );
+                  console.log("transport connected: ", transportOptions.id);
                   connectSendTransport({
                     variables: {
                       transportId: transportOptions.id,
@@ -181,46 +218,11 @@ const EventPlayer = ({ userStream }) => {
   return (
     <div>
       {meetingStatus.data.meetingStatus === "offline" ? (
-        <Button
-          onClick={() =>
-            startSession()
-              .then((msg) => getRTPCap())
-              .then(({ data }) => JSON.parse(data.getRTPCap))
-              .then((routerRtpCapabilities) => {
-                console.log(routerRtpCapabilities);
-                // create a device
-                return device.load({ routerRtpCapabilities });
-                // load
-                // device can produce
-              })
-              .then((dev) => {
-                setDeviceLoaded(true);
-              })
-              .catch((err) => console.log(err))
-          }
-        >
+        <Button onClick={() => startSession().then((msg) => console.log(msg))}>
           Start Session
         </Button>
       ) : (
-        <Button
-          onClick={() =>
-            getRTPCap()
-              .then(({ data }) => JSON.parse(data.getRTPCap))
-              .then((routerRtpCapabilities) => {
-                console.log(routerRtpCapabilities);
-                // create a device
-                return device.load({ routerRtpCapabilities });
-                // load
-                // device can produce
-              })
-              .then((dev) => {
-                setDeviceLoaded(true);
-              })
-              .catch((err) => console.log(err))
-          }
-        >
-          Join Session
-        </Button>
+        <div>Device is loaded</div>
       )}
 
       {/* <MediaActions />*/}

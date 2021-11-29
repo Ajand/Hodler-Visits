@@ -45,11 +45,9 @@ const MediaActions = ({
     }
   }, [userStream]);
 
-  console.log(user);
 
   return (
     <>
-      {" "}
       <div
         css={(theme) => css`
           position: absolute;
